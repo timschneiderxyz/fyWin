@@ -113,7 +113,6 @@ The following Apps **cant** be removed with this function:
   Connect
   Cortana
   Microsoft Edge
-  Mixed-Reality-Portal
   OneDrive
   Settings
   Windows Defender
