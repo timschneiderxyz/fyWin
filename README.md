@@ -16,7 +16,6 @@ This PowerShell Script helps you, among other things, to get rid of pre-installe
   - [Execution](#execution)
 - [**Functions**](#functions)
   - [Remove undesired and unneeded Apps](#remove-undesired-and-unneeded-apps)
-  - [Remove OneDrive](#remove-onedrive)
   - [Disable App suggestions and Windows Consumer Features](#disable-app-suggestions-and-windows-consumer-features)
   - [Disable unnecessary Scheduled Tasks](#disable-unnecessary-scheduled-tasks)
   - [Disable unnecessary Windows Services](#disable-unnecessary-windows-services)
@@ -117,19 +116,6 @@ The following Apps **cant** be removed with this function:
   Settings
   Windows Defender
 ````
-
-> **Note:** Another functions will take care of OneDrive.
-
-### Remove OneDrive
-
-This function will take care of removing OneDrive from your computer. This includes:
-
-- Uninstalling OneDrive.
-- Disabling OneDrive via group policies.
-- Removing OneDrive from scheduled tasks.
-- Removing OneDrive folders.
-- Removing OneDrive start menu entry.
-- Removing OneDrive from explorer sidebar.
 
 ### Disable App suggestions and Windows Consumer Features
 

@@ -19,20 +19,20 @@ Function Remove_Apps {
 
   #Remove AppxPackages
   Get-AppxPackage -AllUsers |
-    Where-Object {$_.name -notlike "*Microsoft.WindowsStore*"} |
-    Where-Object {$_.name -notlike "*Microsoft.Windows.Photos*"} |
-    Where-Object {$_.name -notlike "*Microsoft.WindowsCalculator*"} |
-    Where-Object {$_.name -notlike "*Microsoft.ScreenSketch*"} |
+  Where-Object { $_.name -notlike "*Microsoft.WindowsStore*" } |
+  Where-Object { $_.name -notlike "*Microsoft.Windows.Photos*" } |
+  Where-Object { $_.name -notlike "*Microsoft.WindowsCalculator*" } |
+  Where-Object { $_.name -notlike "*Microsoft.ScreenSketch*" } |
   # Where-Object {$_.name -notlike "*Microsoft.MicrosoftStickyNotes*"} |
   # Where-Object {$_.name -notlike "*Microsoft.BingWeather*"} |
   Remove-AppxPackage -ErrorAction SilentlyContinue | Out-Null
 
   #Remove AppxProvisionedPackages
   Get-AppxProvisionedPackage -online |
-    Where-Object {$_.packagename -notlike "*Microsoft.WindowsStore*"} |
-    Where-Object {$_.packagename -notlike "*Microsoft.Windows.Photos*"} |
-    Where-Object {$_.packagename -notlike "*Microsoft.WindowsCalculator*"} |
-    Where-Object {$_.packagename -notlike "*Microsoft.ScreenSketch*"} |
+  Where-Object { $_.packagename -notlike "*Microsoft.WindowsStore*" } |
+  Where-Object { $_.packagename -notlike "*Microsoft.Windows.Photos*" } |
+  Where-Object { $_.packagename -notlike "*Microsoft.WindowsCalculator*" } |
+  Where-Object { $_.packagename -notlike "*Microsoft.ScreenSketch*" } |
   # Where-Object {$_.packagename -notlike "*Microsoft.MicrosoftStickyNotes*"} |
   # Where-Object {$_.packagename -notlike "*Microsoft.BingWeather*"} |
   Remove-AppxProvisionedPackage -online -ErrorAction SilentlyContinue | Out-Null
@@ -83,82 +83,6 @@ Function Remove_Apps {
 
   # ==================================================
   Write-Output "Undesired and/or not needed Apps have been removed."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
-<#  Remove OneDrive
-    ========================================================================  #>
-
-Function Remove_OneDrive {
-
-  # ==================================================
-  Write-Output "Terminating OneDrive process..."
-
-  taskkill /F /IM "OneDrive.exe" | Out-Null
-
-  # ==================================================
-  Write-Output "Uninstalling OneDrive..."
-
-  If (Test-Path "$env:systemroot\System32\OneDriveSetup.exe") {
-    & "$env:systemroot\System32\OneDriveSetup.exe" /uninstall | Out-Null
-    Start-Sleep 5
-  }
-  If (Test-Path "$env:systemroot\SysWOW64\OneDriveSetup.exe") {
-    & "$env:systemroot\SysWOW64\OneDriveSetup.exe" /uninstall | Out-Null
-    Start-Sleep 5
-  }
-
-  # ==================================================
-  Write-Output "Disabling OneDrive via Group Policies..."
-
-  $OneDrive_GroupPolicies = "HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\OneDrive"
-  If (!(Test-Path $OneDrive_GroupPolicies)) {
-    Mkdir $OneDrive_GroupPolicies -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty $OneDrive_GroupPolicies -Name DisableFileSyncNGSC -Value 1 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "Removing OneDrive from Scheduled Tasks..."
-
-  Get-ScheduledTask -TaskName "*OneDrive*" | Unregister-ScheduledTask -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
-
-  # ==================================================
-  Write-Output "Removing OneDrive folders..."
-
-  Remove-Item "$env:systemdrive\OneDriveTemp" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-  Remove-Item "$env:programdata\Microsoft OneDrive" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-  Remove-Item "$env:localappdata\Microsoft\OneDrive"-Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-  # Check if directory is empty before removing:
-  If ((Get-ChildItem "$env:userprofile\OneDrive" -Recurse | Measure-Object).Count -eq 0) {
-    Remove-Item "$env:userprofile\OneDrive" -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "Removing OneDrive Start Menu entry..."
-
-  Remove-Item "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\OneDrive.lnk" -Force -ErrorAction SilentlyContinue | Out-Null
-
-  # ==================================================
-  Write-Output "Removing OneDrive from Explorer sidebar..."
-
-  New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
-  $OneDrive_ExplorerEntry_Key01 = "HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-  If (!(Test-Path $OneDrive_ExplorerEntry_Key01)) {
-    Mkdir $OneDrive_ExplorerEntry_Key01 -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty $OneDrive_ExplorerEntry_Key01 -Name System.IsPinnedToNameSpaceTree -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-  $OneDrive_ExplorerEntry_Key02 = "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}"
-  If (!(Test-Path $OneDrive_ExplorerEntry_Key02)) {
-    Mkdir $OneDrive_ExplorerEntry_Key02 -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty $OneDrive_ExplorerEntry_Key02 -Name System.IsPinnedToNameSpaceTree -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-  Remove-PSDrive HKCR | Out-Null
-
-  # ==================================================
-  Write-Output "OneDrive has been removed."
   Write-Output ""
   Write-Output "=================================================="
   Write-Output ""
@@ -848,21 +772,6 @@ Switch ($ReadHost) {
       }
     }
     # ==================================================
-    Write-Output "Would you like to remove OneDrive?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Remove_OneDrive
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
     Write-Output "Would you like to disable App suggestions and prevent Apps from returning?"
     $ReadHost = Read-Host " ( Yes / No ) "
     Switch ($ReadHost) {
@@ -1278,9 +1187,6 @@ Switch ($ReadHost) {
       Yes {
         # ==================================================
         Remove_Apps
-        Start-Sleep 1
-        # ==================================================
-        Remove_OneDrive
         Start-Sleep 1
         # ==================================================
         Disable_AppSuggestionsAndConsumerFeatures
