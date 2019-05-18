@@ -6,7 +6,7 @@ This PowerShell Script helps you, among other things, to get rid of pre-installe
 
 **The script is provided as is and you use it at your own risk. I am not liable for any damages or problems that may result from using it. Also, there is no function to revert the changes.**
 
-**Last tested with Windows 10 Home and Education on Build 1809 64-Bit.**
+**Tested with Windows 10 Home, Pro and Education on Build 1809 64-Bit.**
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -93,7 +93,7 @@ Following is a list of all the functions provided by this script.
 
 This function takes care of most of the pre-installed apps on Windows 10 and removes them.
 
-The following Apps **wont** be removed with this function:
+The following Apps **won't** be removed with this function:
 
 ````plaintext
   Calculator
@@ -106,7 +106,7 @@ The following Apps **wont** be removed with this function:
 
 Apps marked with * must be uncommented in the script if you want to keep them. To do this simply remove the # in the corresponding line. Same thing goes in reverse.
 
-The following Apps **cant** be removed with this function:
+The following Apps **can't** be removed with this function:
 
 ````plaintext
   Connect
@@ -253,7 +253,7 @@ Your feedback is appreciated and allows me to further improve this script and/or
 
 ## **Donations**
 
-If you would like to buy me a beer :beer:, you can do this [here](https://paypal.me/timschneiderxyz). Thanks! :heart:
+If you would like to buy me a beer 🍺, you can do this [here](https://paypal.me/timschneiderxyz). Thanks! ❤️
 
 ## **License**
 
