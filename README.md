@@ -21,15 +21,10 @@ This PowerShell Script helps you, among other things, to get rid of pre-installe
   - [Disable unnecessary Windows Services](#disable-unnecessary-windows-services)
   - [Disable Feedback Experience and Telemetry](#disable-feedback-experience-and-telemetry)
   - [Disable Windows Defender Cloud](#disable-windows-defender-cloud)
-  - [Disable Cortana from Search](#disable-cortana-from-search)
   - [Disable Fast Startup](#disable-fast-startup)
   - [Disable Edge Shortcut creation after Update](#disable-edge-shortcut-creation-after-update)
   - [Disable Windows 10 Lock Screen](#disable-windows-10-lock-screen)
   - [Remove the compression for .jpeg Wallpaper](#remove-the-compression-for-jpeg-wallpaper)
-  - [Enable small Icons on Taskbar](#enable-small-icons-on-taskbar)
-  - [Disable Search Icon and Box on Taskbar](#disable-search-icon-and-box-on-taskbar)
-  - [Enable Task View Icon on Taskbar](#enable-task-view-icon-on-taskbar)
-  - [Disable People Icon on Taskbar](#disable-people-icon-on-taskbar)
   - [Enable This PC as default Explorer start view](#enable-this-pc-as-default-explorer-start-view)
   - [Disable recently and frequently used in Explorer](#disable-recently-and-frequently-used-in-explorer)
   - [Remove 3D Objects folder](#remove-3d-objects-folder)
@@ -39,7 +34,6 @@ This PowerShell Script helps you, among other things, to get rid of pre-installe
   - [Remove Share from the context menu](#remove-share-from-the-context-menu)
   - [Remove Include in Library from the context menu](#remove-include-in-library-from-the-context-menu)
   - [Remove Restore to previous Versions from the context menu](#remove-restore-to-previous-versions-from-the-context-menu)
-  - [Install OpenSSH](#install-openssh)
   - [Allow SMB2 Share Guest Access](#allow-smb2-share-guest-access)
 - [**Contributing**](#contributing)
 - [**Donations**](#donations)
@@ -161,10 +155,6 @@ Prevents Windows from asking for feedback and collecting various user data to sh
 
 Disables Windows Defender Cloud by editing Registry entries.
 
-### Disable Cortana from Search
-
-Disables Cortana from Search by editing Registry entries.
-
 ### Disable Fast Startup
 
 Disables Fast Startup by editing a Registry entry.
@@ -180,22 +170,6 @@ Disables the Windows 10 Lock Screen by editing a Registry entry.
 ### Remove the compression for .jpeg Wallpaper
 
 If you set a .jpeg image as background Windows compresses it to 85% of the actual image quality (for whatever reason). This will be prevented by creating a registry entry so that Windows takes over 100% of the quality.
-
-### Enable small Icons on Taskbar
-
-Enables small Icons on Taskbar by editing a Registry entry.
-
-### Disable Search Icon and Box on Taskbar
-
-Disables the Search Icon and Box on Taskbar by editing a Registry entry.
-
-### Enable Task View Icon on Taskbar
-
-Enables the Task View Icon on Taskbar by editing a Registry entry.
-
-### Disable People Icon on Taskbar
-
-Disables the People Icon on Taskbar by editing a Registry entry.
 
 ### Enable This PC as default Explorer start view
 
@@ -234,12 +208,6 @@ Removes the 'Include in Library' entry from the context menu by deleting Registr
 ### Remove Restore to previous Versions from the context menu
 
 Removes the 'Restore to previous Versions' entry from the context menu by deleting Registry entries.
-
-### Install OpenSSH
-
-For more informations click [here](https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_overview).
-
-> **Note:** This function is only available when the script is executed in `Interactive` mode.
 
 ### Allow SMB2 Share Guest Access
 

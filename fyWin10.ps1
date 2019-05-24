@@ -235,32 +235,6 @@ Function Disable_WindowsDefenderCloud {
 
 }
 
-<#  Disable Cortana from Search
-    ========================================================================  #>
-
-Function Disable_CortanaSearch {
-
-  # ==================================================
-  Write-Output "Disabling Cortana from Search..."
-
-  $CortanaSearch_Key01 = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
-  If (Test-Path $CortanaSearch_Key01) {
-    Set-ItemProperty $CortanaSearch_Key01 -Name AllowCortana -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  $CortanaSearch_Key02 = "HKLM:\SOFTWARE\Wow6432Node\Policies\Microsoft\Windows\Windows Search"
-  If (Test-Path $CortanaSearch_Key02) {
-    Set-ItemProperty $CortanaSearch_Key02 -Name AllowCortana -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "Cortana has been disabled from Search."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
 <#  Disable Fast Startup
     ========================================================================  #>
 
@@ -340,90 +314,6 @@ Function Remove_JPEGWallpaperCompression {
 
   # ==================================================
   Write-Output "The compression for.jpeg Wallpaper has been removed."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
-<#  Enable small Icons on Taskbar
-    ========================================================================  #>
-
-Function Enable_SmallIcons {
-
-  # ==================================================
-  Write-Output "Enabling small Icons on Taskbar..."
-
-  $SmallIcons = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-  If (Test-Path $SmallIcons) {
-    Set-ItemProperty $SmallIcons -Name TaskbarSmallIcons -Value 1 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "Small Icons on Taskbar have been enabled."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
-<#  Disable Search Icon and Box on Taskbar
-    ========================================================================  #>
-
-Function Disable_SearchIconBox {
-
-  # ==================================================
-  Write-Output "Disabling Search Icon and Box on Taskbar..."
-
-  $SearchIconBox = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search"
-  If (Test-Path $SearchIconBox) {
-    Set-ItemProperty $SearchIconBox -Name SearchboxTaskbarMode -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "Search Icon and Box on Taskbar have been disabled."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
-<#  Enable Task View Icon on Taskbar
-    ========================================================================  #>
-
-Function Enable_TaskView {
-
-  # ==================================================
-  Write-Output "Enabling Task View Icon on Taskbar..."
-
-  $TaskView = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-  If (Test-Path $TaskView) {
-    Set-ItemProperty $TaskView -Name ShowTaskViewButton -Value 1 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "Task View Icon on Taskbar has been enabled."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
-<#  Disable People Icon on Taskbar
-    ========================================================================  #>
-
-Function Disable_PeopleIcon {
-
-  # ==================================================
-  Write-Output "Disabling People Icon on Taskbar..."
-
-  $PeopleIcon = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People"
-  If (Test-Path $PeopleIcon) {
-    Set-ItemProperty $PeopleIcon -Name PeopleBand -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "People Icon on Taskbar has been disabled."
   Write-Output ""
   Write-Output "=================================================="
   Write-Output ""
@@ -670,25 +560,6 @@ Function Remove_RestoreToPreviousVersions {
 
 }
 
-<#  Install OpenSSH
-    ========================================================================  #>
-
-Function Install_OpenSSH {
-
-  # ==================================================
-  Write-Output "Installing OpenSSH..."
-
-  Add-WindowsCapability -Online -Name OpenSSH*
-  Set-Service ssh-agent -StartupType Manual
-
-  # ==================================================
-  Write-Output "OpenSSH has been installed."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
 <#  Allow SMB2 Share Guest Access
     ========================================================================  #>
 
@@ -838,21 +709,6 @@ Switch ($ReadHost) {
       }
     }
     # ==================================================
-    Write-Output "Would you like to disable Cortana from Search?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Disable_CortanaSearch
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
     Write-Output "Would you like to disable Fast Startup?"
     $ReadHost = Read-Host " ( Yes / No ) "
     Switch ($ReadHost) {
@@ -903,66 +759,6 @@ Switch ($ReadHost) {
     Switch ($ReadHost) {
       Yes {
         Remove_JPEGWallpaperCompression
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
-    Write-Output "Would you like to enable small Icons on Taskbar?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Enable_SmallIcons
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
-    Write-Output "Would you like to disable the Search Icon and Box on Taskbar?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Disable_SearchIconBox
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
-    Write-Output "Would you like to enable the Task View Icon on Taskbar?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Enable_TaskView
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
-    Write-Output "Would you like to disable the People Icon on Taskbar?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Disable_PeopleIcon
         Start-Sleep 1
       }
       No {
@@ -1108,21 +904,6 @@ Switch ($ReadHost) {
       }
     }
     # ==================================================
-    Write-Output "Would you like to install OpenSSH?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Install_OpenSSH
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
     Write-Output "Would you like to allow SMB2 Share Guest Access?"
     $ReadHost = Read-Host " ( Yes / No ) "
     Switch ($ReadHost) {
@@ -1195,9 +976,6 @@ Switch ($ReadHost) {
         Disable_WindowsDefenderCloud
         Start-Sleep 1
         # ==================================================
-        Disable_CortanaSearch
-        Start-Sleep 1
-        # ==================================================
         Disable_FastStartup
         Start-Sleep 1
         # ==================================================
@@ -1208,18 +986,6 @@ Switch ($ReadHost) {
         Start-Sleep 1
         # ==================================================
         Remove_JPEGWallpaperCompression
-        Start-Sleep 1
-        # ==================================================
-        Enable_SmallIcons
-        Start-Sleep 1
-        # ==================================================
-        Disable_SearchIconBox
-        Start-Sleep 1
-        # ==================================================
-        Enable_TaskView
-        Start-Sleep 1
-        # ==================================================
-        Disable_PeopleIcon
         Start-Sleep 1
         # ==================================================
         Enable_ExplorerThisPC
