@@ -6,7 +6,7 @@ This PowerShell Script helps you, among other things, to get rid of pre-installe
 
 **The script is provided as is and you use it at your own risk. I am not liable for any damages or problems that may result from using it. Also, there is no function to revert the changes.**
 
-**Tested with Windows 10 Home, Pro and Education on Build 1809 64-Bit.**
+**Tested with Windows 10 on Build 1909 64-Bit.**
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -24,7 +24,6 @@ This PowerShell Script helps you, among other things, to get rid of pre-installe
   - [Disable Fast Startup](#disable-fast-startup)
   - [Disable Edge Shortcut creation after Update](#disable-edge-shortcut-creation-after-update)
   - [Disable Windows 10 Lock Screen](#disable-windows-10-lock-screen)
-  - [Remove the compression for .jpeg Wallpaper](#remove-the-compression-for-jpeg-wallpaper)
   - [Enable This PC as default Explorer start view](#enable-this-pc-as-default-explorer-start-view)
   - [Disable recently and frequently used in Explorer](#disable-recently-and-frequently-used-in-explorer)
   - [Remove 3D Objects folder](#remove-3d-objects-folder)
@@ -34,8 +33,6 @@ This PowerShell Script helps you, among other things, to get rid of pre-installe
   - [Remove Share from the context menu](#remove-share-from-the-context-menu)
   - [Remove Include in Library from the context menu](#remove-include-in-library-from-the-context-menu)
   - [Remove Restore to previous Versions from the context menu](#remove-restore-to-previous-versions-from-the-context-menu)
-  - [Allow SMB2 Share Guest Access](#allow-smb2-share-guest-access)
-- [**Contributing**](#contributing)
 - [**Donations**](#donations)
 - [**License**](#license)
 
@@ -44,6 +41,10 @@ This PowerShell Script helps you, among other things, to get rid of pre-installe
 The purpose of this Script is quite simple: To get rid of all the inconveniences Windows 10 brings with it. At least most of them.
 
 It is very annoying that such a script is even necessary, after all you have paid for your operating system (at least most people did). Nevertheless, Microsoft doesn't seem to care about this and puts all kinds of bloatware and other inconveniences into the operating system. With the help of this Script it is possible to fix at least some of this.
+
+
+---
+
 
 ## **How to use**
 
@@ -78,6 +79,10 @@ You will now be asked how you would like to run the Script. There are two option
 > **Important:** You must enter the commands exactly as specified. So for example it needs to be `Yes` not just `Y` to work. However, it does not matter whether the letters are upper or lower case.
 >
 > **Advice:** It is recommended to restart the computer after executing the script.
+
+
+---
+
 
 ## **Functions**
 
@@ -167,10 +172,6 @@ Disables Edge Desktop Shortcut creation after a Windows Update by editing Regist
 
 Disables the Windows 10 Lock Screen by editing a Registry entry.
 
-### Remove the compression for .jpeg Wallpaper
-
-If you set a .jpeg image as background Windows compresses it to 85% of the actual image quality (for whatever reason). This will be prevented by creating a registry entry so that Windows takes over 100% of the quality.
-
 ### Enable This PC as default Explorer start view
 
 Enables 'This PC' as default Explorer start view by editing a Registry entry.
@@ -209,15 +210,9 @@ Removes the 'Include in Library' entry from the context menu by deleting Registr
 
 Removes the 'Restore to previous Versions' entry from the context menu by deleting Registry entries.
 
-### Allow SMB2 Share Guest Access
 
-For more informations click [here](https://support.microsoft.com/de-de/help/4046019/guest-access-smb2-disabled-by-default-in-windows-10-server-2016).
+---
 
-> **Note:** This function is only available when the script is executed in `Interactive` mode.
-
-## **Contributing**
-
-Your feedback is appreciated and allows me to further improve this script and/or add additional functions. To do so just simply open an `issue` or send a `pull request`.
 
 ## **Donations**
 

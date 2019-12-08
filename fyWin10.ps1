@@ -299,27 +299,6 @@ Function Disable_LockScreen {
 
 }
 
-<#  Remove the compression for .jpeg Wallpaper
-    ========================================================================  #>
-
-Function Remove_JPEGWallpaperCompression {
-
-  # ==================================================
-  Write-Output "Removing the compression for .jpeg Wallpaper..."
-
-  $JPEGWallpaperCompression = "HKCU:\Control Panel\Desktop"
-  If (Test-Path $JPEGWallpaperCompression) {
-    New-ItemProperty $JPEGWallpaperCompression -Name JPEGImportQuality -Value 64 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "The compression for.jpeg Wallpaper has been removed."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
 <#  Enable 'This PC' as default Explorer start view
     ========================================================================  #>
 
@@ -560,27 +539,6 @@ Function Remove_RestoreToPreviousVersions {
 
 }
 
-<#  Allow SMB2 Share Guest Access
-    ========================================================================  #>
-
-Function Allow_GuestAccess {
-
-  # ==================================================
-  Write-Output "Allowing SMB2 Share Guest Access..."
-
-  $GuestAccess = "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters"
-  If (Test-Path $GuestAccess) {
-    Set-ItemProperty $GuestAccess -Name AllowInsecureGuestAuth -Value 1 -Verbose -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  # ==================================================
-  Write-Output "SMB2 Share Guest Access has been allowed."
-  Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
-}
-
 <#  ========================================================================
     # Execution
     ========================================================================  #>
@@ -754,21 +712,6 @@ Switch ($ReadHost) {
       }
     }
     # ==================================================
-    Write-Output "Would you like to remove the compression for .jpeg Wallpaper?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Remove_JPEGWallpaperCompression
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
     Write-Output "Would you like to enable 'This PC' as default Explorer start view?"
     $ReadHost = Read-Host " ( Yes / No ) "
     Switch ($ReadHost) {
@@ -904,21 +847,6 @@ Switch ($ReadHost) {
       }
     }
     # ==================================================
-    Write-Output "Would you like to allow SMB2 Share Guest Access?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
-      Yes {
-        Allow_GuestAccess
-        Start-Sleep 1
-      }
-      No {
-        Write-Output "Skipped."
-        Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
-      }
-    }
-    # ==================================================
     Write-Output " ____                   _"
     Write-Output "|  _ \  ___  _ __   ___| |"
     Write-Output "| | | |/ _ \| '_ \ / _ \ |"
@@ -983,9 +911,6 @@ Switch ($ReadHost) {
         Start-Sleep 1
         # ==================================================
         Disable_LockScreen
-        Start-Sleep 1
-        # ==================================================
-        Remove_JPEGWallpaperCompression
         Start-Sleep 1
         # ==================================================
         Enable_ExplorerThisPC
