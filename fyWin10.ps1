@@ -5,19 +5,19 @@
 # |_|  \__, | \_/\_/  |_|_| |_|_|\___/
 #      |___/
 
+#Requires -RunAsAdministrator
+
 <#  ========================================================================
     # Functions
     ========================================================================  #>
 
-<#  Remove undesired and/or not needed Apps
-    ========================================================================  #>
+# Remove pre-installed Apps
+# ==============================================================================
 
-Function Remove_Apps {
+function removeApps {
+  Write-Output "Removing pre-installed Apps..."
 
-  # ==================================================
-  Write-Output "Removing undesired and/or not needed Apps..."
-
-  #Remove AppxPackages
+  # Remove AppxPackages
   Get-AppxPackage -AllUsers |
   Where-Object { $_.name -notlike "*Microsoft.WindowsStore*" } |
   Where-Object { $_.name -notlike "*Microsoft.Windows.Photos*" } |
@@ -27,7 +27,7 @@ Function Remove_Apps {
   # Where-Object {$_.name -notlike "*Microsoft.BingWeather*"} |
   Remove-AppxPackage -ErrorAction SilentlyContinue | Out-Null
 
-  #Remove AppxProvisionedPackages
+  # Remove AppxProvisionedPackages
   Get-AppxProvisionedPackage -online |
   Where-Object { $_.packagename -notlike "*Microsoft.WindowsStore*" } |
   Where-Object { $_.packagename -notlike "*Microsoft.Windows.Photos*" } |
@@ -37,91 +37,39 @@ Function Remove_Apps {
   # Where-Object {$_.packagename -notlike "*Microsoft.BingWeather*"} |
   Remove-AppxProvisionedPackage -online -ErrorAction SilentlyContinue | Out-Null
 
-  # ==================================================
-  Write-Output "Removing remaining Registry Keys..."
-
-  New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
-
-  $Leftover_Keys = @(
-
-    # Get Office
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
-    "HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
-
-    # Microsoft.PPIProjection
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.PPIProjection_10.0.16299.15_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.16299.15_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.PPIProjection_10.0.16299.15_neutral_neutral_cw5n1h2txyewy"
-
-    # Windows Feedback
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.BackgroundTasks\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
-    "HKCR:\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-
-  )
-
-  ForEach ($Leftover_Key in $Leftover_Keys) {
-    Remove-Item $Leftover_Key -Recurse -ErrorAction SilentlyContinue | Out-Null
-  }
-
-  Remove-PSDrive HKCR | Out-Null
-
-  # ==================================================
-  Write-Output "Undesired and/or not needed Apps have been removed."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable App suggestions and Consumer Features
-    ========================================================================  #>
+# Disable App suggestions and Consumer Features
+# ==============================================================================
 
-Function Disable_AppSuggestionsAndConsumerFeatures {
-
-  # ==================================================
-  Write-Output "Disabling App suggestions and prevent the silent installation of Apps..."
+function disableAppSuggestionsAndConsumerFeatures {
+  Write-Output "Disabling App suggestions and Consumer Features..."
 
   $AppSuggestions = "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
-  If (Test-Path $AppSuggestions) {
-    Set-ItemProperty $AppSuggestions -Name ContentDeliveryAllowed -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-    Set-ItemProperty $AppSuggestions -Name OemPreInstalledAppsEnabled -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-    Set-ItemProperty $AppSuggestions -Name PreInstalledAppsEnabled -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-    Set-ItemProperty $AppSuggestions -Name SilentInstalledAppsEnabled -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-    Set-ItemProperty $AppSuggestions -Name SoftLandingEnabled -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-    Set-ItemProperty $AppSuggestions -Name SubscribedContentEnabled -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-    Set-ItemProperty $AppSuggestions -Name SystemPaneSuggestionsEnabled -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
+  if (Test-Path $AppSuggestions) {
+    Set-ItemProperty $AppSuggestions -Name ContentDeliveryAllowed -Value 0 -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $AppSuggestions -Name OemPreInstalledAppsEnabled -Value 0 -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $AppSuggestions -Name PreInstalledAppsEnabled -Value 0 -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $AppSuggestions -Name SilentInstalledAppsEnabled -Value 0 -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $AppSuggestions -Name SoftLandingEnabled -Value 0 -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $AppSuggestions -Name SubscribedContentEnabled -Value 0 -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $AppSuggestions -Name SystemPaneSuggestionsEnabled -Value 0 -ErrorAction SilentlyContinue | Out-Null
   }
-
-  # ==================================================
-  Write-Output "Disabling Windows Consumer Features..."
 
   $AppReturning = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
-  If (!(Test-Path $AppReturning)) {
+  if (!(Test-Path $AppReturning)) {
     Mkdir $AppReturning -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty $AppReturning -Name DisableWindowsConsumerFeatures -Value 1 -Verbose -ErrorAction SilentlyContinue | Out-Null
+    New-ItemProperty $AppReturning -Name DisableWindowsConsumerFeatures -Value 1 -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "App Suggestions and Windows Consumer Features have been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable unnecessary Scheduled Tasks
-    ========================================================================  #>
+# Disable unnecessary Scheduled Tasks
+# ==============================================================================
 
-Function Disable_Tasks {
-
-  # ==================================================
+function disableTasks {
   Write-Output "Disabling unnecessary Scheduled Tasks..."
 
   $Tasks = @(
@@ -135,20 +83,13 @@ Function Disable_Tasks {
     Get-ScheduledTask -TaskName $Task | Disable-ScheduledTask -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "Unnecessary Scheduled Tasks have been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable unnecessary Windows Services
-    ========================================================================  #>
+# Disable unnecessary Windows Services
+# ==============================================================================
 
-Function Disable_Services {
-
-  # ==================================================
+function disableServices {
   Write-Output "Disabling unnecessary Windows Services..."
 
   $Services = @(
@@ -168,186 +109,127 @@ Function Disable_Services {
     Get-Service -Name $Service | Set-Service -StartupType Disabled -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "Unnecessary Windows Services have been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable Feedback Experience and Telemetry
-    ========================================================================  #>
+#  Disable Feedback Experience and Telemetry
+# ==============================================================================
 
-Function Disable_FeedbackExperienceAndTelemetry {
-
-  # ==================================================
-  Write-Output "Disabling Windows Feedback Experience..."
+function disableFeedbackExperienceAndTelemetry {
+  Write-Output "Disabling Feedback Experience and Telemetry..."
 
   $WindowsFeedbackExperience = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo"
-  If (Test-Path $WindowsFeedbackExperience) {
-    Set-ItemProperty $WindowsFeedbackExperience -Name Enabled -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
+  if (Test-Path $WindowsFeedbackExperience) {
+    Set-ItemProperty $WindowsFeedbackExperience -Name Enabled -Value 0 -ErrorAction SilentlyContinue | Out-Null
   }
 
   $Siuf = "HKCU:\Software\Microsoft\Siuf"
   $SiufRules = "HKCU:\Software\Microsoft\Siuf\Rules"
-  If (!(Test-Path $SiufRules)) {
+  if (!(Test-Path $SiufRules)) {
     Mkdir $Siuf -ErrorAction SilentlyContinue | Out-Null
     Mkdir $SiufRules -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty $SiufRules -Name NumberOfSIUFInPeriod -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
+    New-ItemProperty $SiufRules -Name NumberOfSIUFInPeriod -Value 0 -ErrorAction SilentlyContinue | Out-Null
   }
-
-  # ==================================================
-  Write-Output "Disabling Windows Telemetry..."
 
   $DataCollection = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"
-  If (Test-Path $DataCollection) {
-    Set-ItemProperty $DataCollection -Name AllowTelemetry -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
+  if (Test-Path $DataCollection) {
+    Set-ItemProperty $DataCollection -Name AllowTelemetry -Value 0 -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "Windows Feedback Experience and Telemetry have been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable Windows Defender Cloud
-    ========================================================================  #>
+# Disable Defender Cloud
+# ==============================================================================
 
-Function Disable_WindowsDefenderCloud {
-
-  # ==================================================
-  Write-Output "Disabling Windows Defender Cloud..."
+function disableDefenderCloud {
+  Write-Output "Disabling Defender Cloud..."
 
   $WindowsDefenderCloud = "HKLM:\SOFTWARE\Microsoft\Windows Defender\Spynet"
-  If (Test-Path $WindowsDefenderCloud) {
-    Set-ItemProperty $WindowsDefenderCloud -Name SpynetReporting -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-    Set-ItemProperty $WindowsDefenderCloud -Name SubmitSamplesConsent -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
+  if (Test-Path $WindowsDefenderCloud) {
+    Set-ItemProperty $WindowsDefenderCloud -Name SpynetReporting -Value 0 -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $WindowsDefenderCloud -Name SubmitSamplesConsent -Value 0 -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "Windows Defender Cloud has been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable Fast Startup
-    ========================================================================  #>
+#  Disable Fast Startup
+# ==============================================================================
 
-Function Disable_FastStartup {
-
-  # ==================================================
+function disableFastStartup {
   Write-Output "Disabling Fast Startup..."
 
   $FastStartup = "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power"
-  If (Test-Path $FastStartup) {
-    Set-ItemProperty $FastStartup -Name HiberbootEnabled -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
+  if (Test-Path $FastStartup) {
+    Set-ItemProperty $FastStartup -Name HiberbootEnabled -Value 0 -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "Fast Startup has been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable Edge Shortcut creation after Update
-    ========================================================================  #>
+# Disable Edge Shortcut creation after update
+# ==============================================================================
 
-Function Disable_EdgeShortcut {
-
-  # ==================================================
-  Write-Output "Disabling Edge Shortcut creation after Update..."
+function disableEdgeShortcut {
+  Write-Output "Disabling Edge Shortcut creation after update..."
 
   $EdgeShortcut = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer"
-  If (Test-Path $EdgeShortcut) {
-    New-ItemProperty $EdgeShortcut -Name DisableEdgeDesktopShortcutCreation -Value 1 -Verbose -ErrorAction SilentlyContinue | Out-Null
+  if (Test-Path $EdgeShortcut) {
+    New-ItemProperty $EdgeShortcut -Name DisableEdgeDesktopShortcutCreation -Value 1 -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "Edge Shortcut creation after Update has been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable Windows 10 Lock Screen
-    ========================================================================  #>
+# Disable Lock Screen
+# ==============================================================================
 
-Function Disable_LockScreen {
-
-  # ==================================================
-  Write-Output "Disabling Windows 10 Lock Screen..."
+function disableLockScreen {
+  Write-Output "Disabling Lock Screen..."
 
   $LockScreen = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization"
-  If (!(Test-Path $LockScreen)) {
+  if (!(Test-Path $LockScreen)) {
     Mkdir $LockScreen -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty $LockScreen -Name NoLockScreen -Value 1 -Verbose -ErrorAction SilentlyContinue | Out-Null
+    New-ItemProperty $LockScreen -Name NoLockScreen -Value 1 -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "Windows 10 Lock Screen has been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Enable 'This PC' as default Explorer start view
-    ========================================================================  #>
+# Set 'This PC' as default Explorer start view
+# ==============================================================================
 
-Function Enable_ExplorerThisPC {
-
-  # ==================================================
-  Write-Output "Enabling 'This PC' as default Explorer start view..."
+function setExplorerThisPC {
+  Write-Output "Set 'This PC' as default Explorer start view..."
 
   $ExplorerThisPC = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-  If (Test-Path $ExplorerThisPC) {
-    Set-ItemProperty $ExplorerThisPC -Name LaunchTo -Value 1 -Verbose -ErrorAction SilentlyContinue | Out-Null
+  if (Test-Path $ExplorerThisPC) {
+    Set-ItemProperty $ExplorerThisPC -Name LaunchTo -Value 1 -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "'This PC' as default Explorer start view has been enabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Disable recently and frequently used in Explorer
-    ========================================================================  #>
+# Disable recently and frequently used in Explorer
+# ==============================================================================
 
-Function Disable_RecentlyFrequently {
-
-  # ==================================================
+function disableRecentlyFrequently {
   Write-Output "Disabling recently and frequently used in Explorer..."
 
   $RecentlyFrequently = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer"
-  If (Test-Path $RecentlyFrequently) {
-    Set-ItemProperty $RecentlyFrequently -Name ShowRecent -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
-    Set-ItemProperty $RecentlyFrequently -Name ShowFrequent -Value 0 -Verbose -ErrorAction SilentlyContinue | Out-Null
+  if (Test-Path $RecentlyFrequently) {
+    Set-ItemProperty $RecentlyFrequently -Name ShowRecent -Value 0 -ErrorAction SilentlyContinue | Out-Null
+    Set-ItemProperty $RecentlyFrequently -Name ShowFrequent -Value 0 -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "Recently and frequently used in Explorer has been disabled."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Remove '3D Objects' folder
-    ========================================================================  #>
+# Remove '3D Objects' folder
+# ==============================================================================
 
-Function Remove_3DObjectsFolder {
-
-  # ==================================================
+function remove3DObjectsFolder {
   Write-Output "Removing '3D Objects' folder..."
 
   $3DObjectsFolder_Keys = @(
@@ -359,43 +241,29 @@ Function Remove_3DObjectsFolder {
     Remove-Item $3DObjectsFolder_Key -Recurse -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "'3D Objects' folder has been removed."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Remove 'Edit With Photos' from the context menu
-    ========================================================================  #>
+# Remove 'Edit With Photos' from the context menu
+# ==============================================================================
 
-Function Remove_EditWithPhotos {
-
-  # ==================================================
+function removeEditWithPhotos {
   Write-Output "Removing the 'Edit With Photos' entry from the context menu..."
 
   New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
 
   $EditWithPhotos_Key = "HKCR:\AppX43hnxtbyyps62jhe9sqpdzxn1790zetc\Shell\ShellEdit"
-  New-ItemProperty $EditWithPhotos_Key -Name Programmaticaccessonly -Verbose -ErrorAction SilentlyContinue | Out-Null
+  New-ItemProperty $EditWithPhotos_Key -Name Programmaticaccessonly -ErrorAction SilentlyContinue | Out-Null
 
   Remove-PSDrive HKCR | Out-Null
 
-  # ==================================================
-  Write-Output "The 'Edit With Photos' entry has been removed from the context menu."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Remove 'Create a new Video' from the context menu
-    ========================================================================  #>
+# Remove 'Create a new Video' from the context menu
+# ==============================================================================
 
-Function Remove_CreateANewVideo {
-
-  # ==================================================
+function removeCreateANewVideo {
   Write-Output "Removing the 'Create a new Video' entry from the context menu..."
 
   New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
@@ -411,20 +279,13 @@ Function Remove_CreateANewVideo {
 
   Remove-PSDrive HKCR | Out-Null
 
-  # ==================================================
-  Write-Output "The 'Create a new Video' entry has been removed from the context menu."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Remove 'Edit with Paint 3D' from the context menu
-    ========================================================================  #>
+# Remove 'Edit with Paint 3D' from the context menu
+# ==============================================================================
 
-Function Remove_EditWithPaint3D {
-
-  # ==================================================
+function removeEditWithPaint3D {
   Write-Output "Removing 'Edit with Paint 3D' from the context menu..."
 
   $EditWithPaint3D_Keys = @(
@@ -449,42 +310,28 @@ Function Remove_EditWithPaint3D {
     Remove-Item $EditWithPaint3D_Key -Recurse -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "The 'Edit with Paint 3D' entry has been removed from the context menu."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Remove 'Share' from the context menu
-    ========================================================================  #>
+# Remove 'Share' from the context menu
+# ==============================================================================
 
-Function Remove_Share {
-
-  # ==================================================
+function removeShare {
   Write-Output "Removing the 'Share' entry from the context menu..."
 
   $Share_Key = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked"
-  If (!(Test-Path $Share_Key)) {
+  if (!(Test-Path $Share_Key)) {
     Mkdir $Share_Key -ErrorAction SilentlyContinue | Out-Null
-    New-ItemProperty $Share_Key -Name "{e2bf9676-5f8f-435c-97eb-11607a5bedf7}" -Verbose -ErrorAction SilentlyContinue | Out-Null
+    New-ItemProperty $Share_Key -Name "{e2bf9676-5f8f-435c-97eb-11607a5bedf7}" -ErrorAction SilentlyContinue | Out-Null
   }
 
-  # ==================================================
-  Write-Output "The 'Share' entry has been removed from the context menu."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Remove 'Include in Library' from context menu
-    ========================================================================  #>
+# Remove 'Include in Library' from context menu
+# ==============================================================================
 
-Function Remove_IncludeInLibrary {
-
-  # ==================================================
+function removeIncludeInLibrary {
   Write-Output "Removing the 'Include in Library' entry from the context menu..."
 
   New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
@@ -500,20 +347,13 @@ Function Remove_IncludeInLibrary {
 
   Remove-PSDrive HKCR | Out-Null
 
-  # ==================================================
-  Write-Output "The 'Include in Library' entry has been removed from the context menu."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
-<#  Remove 'Restore to previous Versions' from context menu
-    ========================================================================  #>
+# Remove 'Restore to previous Versions' from context menu
+# ==============================================================================
 
-Function Remove_RestoreToPreviousVersions {
-
-  # ==================================================
+function removeRestoreToPreviousVersions {
   Write-Output "Removing the 'Restore to previous Versions' entry from the context menu..."
 
   New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
@@ -531,12 +371,7 @@ Function Remove_RestoreToPreviousVersions {
 
   Remove-PSDrive HKCR | Out-Null
 
-  # ==================================================
-  Write-Output "The 'Restore to previous Versions' entry has been removed from the context menu."
   Write-Output ""
-  Write-Output "=================================================="
-  Write-Output ""
-
 }
 
 <#  ========================================================================
@@ -551,315 +386,210 @@ Write-Output " |  _| |_| |\ V  V / | | | | | | |_| | "
 Write-Output " |_|  \__, | \_/\_/  |_|_| |_|_|\___/  "
 Write-Output "      |___/                            "
 Write-Output ""
-
-Write-Output ""
-Write-Output "================================================================="
-Write-Output "================================================================="
 Write-Output ""
 Write-Output "*** Welcome to the fyWin10 Script! ***"
 Write-Output ""
 Write-Output "I recommend you to read the README.md before proceeding."
-Write-Output "This will hopefully prevent questions and problems."
 Write-Output ""
-Write-Output "================================================================="
-Write-Output "================================================================="
 Write-Output ""
-Start-Sleep 3
 
 Write-Output "How would you like to run this Script?"
-$ReadHost = Read-Host " ( Interactive / Silent ) "
-Switch ($ReadHost) {
-  <#  ======================================================================
-      Interactive Execution
-      ======================================================================  #>
+Switch (Read-Host "( Interactive / Silent )") {
+  # ============================================================================
+  # Interactive
+  # ============================================================================
   Interactive {
     Write-Output ""
-    Write-Output "================================================================="
     Write-Output ""
-    # ==================================================
-    Write-Output "Would you like to remove all undesired and/or not needed Apps?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Remove the pre-installed Apps?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Remove_Apps
-        Start-Sleep 1
+        removeApps
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable App suggestions and prevent Apps from returning?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable App suggestions and Consumer Features?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_AppSuggestionsAndConsumerFeatures
-        Start-Sleep 1
+        disableAppSuggestionsAndConsumerFeatures
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable unnecessary Scheduled Tasks?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable unnecessary Scheduled Tasks?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_Tasks
-        Start-Sleep 1
+        disableTasks
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable unnecessary Windows Services?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable unnecessary Windows Services?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_Services
-        Start-Sleep 1
+        disableServices
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable Windows Feedback Experience and Telemetry?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable Windows Feedback Experience and Telemetry?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_FeedbackExperienceAndTelemetry
-        Start-Sleep 1
+        disableFeedbackExperienceAndTelemetry
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable Windows Defender Cloud?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable Defender Cloud?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_WindowsDefenderCloud
-        Start-Sleep 1
+        disableDefenderCloud
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable Fast Startup?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable Fast Startup?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_FastStartup
-        Start-Sleep 1
+        disableFastStartup
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable the Edge Shortcut creation after Windows Update?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable the Edge Shortcut creation after Windows update?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_EdgeShortcut
-        Start-Sleep 1
+        disableEdgeShortcut
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable the Windows 10 Lock Screen?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable the Windows 10 Lock Screen?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_LockScreen
-        Start-Sleep 1
+        disableLockScreen
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to enable 'This PC' as default Explorer start view?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Set 'This PC' as default Explorer start view?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Enable_ExplorerThisPC
-        Start-Sleep 1
+        setExplorerThisPC
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to disable recently and frequently used in Explorer?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Disable recently and frequently used in Explorer?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Disable_RecentlyFrequently
-        Start-Sleep 1
+        disableRecentlyFrequently
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to remove the '3D Objects' folder?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Remove the '3D Objects' folder?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Remove_3DObjectsFolder
-        Start-Sleep 1
+        remove3DObjectsFolder
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to remove the 'Edit With Photos' entry from the context menu?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Remove the 'Edit With Photos' entry from the context menu?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Remove_EditWithPhotos
-        Start-Sleep 1
+        removeEditWithPhotos
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to remove the 'Create A New Video' entry from the context menu?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Remove the 'Create A New Video' entry from the context menu?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Remove_CreateANewVideo
-        Start-Sleep 1
+        removeCreateANewVideo
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to remove the 'Edit with Paint 3D' entry from the context menu?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Remove the 'Edit with Paint 3D' entry from the context menu?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Remove_EditWithPaint3D
-        Start-Sleep 1
+        removeEditWithPaint3D
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to remove the 'Share' entry from the context menu?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Remove the 'Share' entry from the context menu?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Remove_Share
-        Start-Sleep 1
+        removeShare
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to remove the 'Include in Library' entry from the context menu?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Remove the 'Include in Library' entry from the context menu?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Remove_IncludeInLibrary
-        Start-Sleep 1
+        removeIncludeInLibrary
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
-    Write-Output "Would you like to remove the 'Restore to previous Versions' entry from the context menu?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Write-Output "Remove the 'Restore to previous Versions' entry from the context menu?"
+    Switch (Read-Host "( Yes / No )") {
       Yes {
-        Remove_RestoreToPreviousVersions
-        Start-Sleep 1
+        removeRestoreToPreviousVersions
       }
       No {
         Write-Output "Skipped."
         Write-Output ""
-        Write-Output "=================================================="
-        Write-Output ""
       }
     }
-    # ==================================================
     Write-Output " ____                   _"
     Write-Output "|  _ \  ___  _ __   ___| |"
     Write-Output "| | | |/ _ \| '_ \ / _ \ |"
     Write-Output "| |_| | (_) | | | |  __/_|"
     Write-Output "|____/ \___/|_| |_|\___(_)"
     Write-Output ""
-    Write-Output "The Script has been executed."
-    Write-Output ""
-    Write-Output "=================================================="
     Write-Output ""
     Write-Output "Would you like to restart your System?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Switch (Read-Host "( Yes / No )") {
       Yes {
         Write-Output "Restarting System..."
         Start-Sleep 3
@@ -873,94 +603,68 @@ Switch ($ReadHost) {
       }
     }
   }
-  <#  ======================================================================
-      Silent Execution
-      ======================================================================  #>
+  # ============================================================================
+  # Silent
+  # ============================================================================
   Silent {
     Write-Output ""
-    Write-Output "================================================================="
     Write-Output ""
-    # ==================================================
     Write-Output "Are you sure?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($ReadHost) {
+    Switch (Read-Host "( Yes / No )") {
       Yes {
         # ==================================================
-        Remove_Apps
-        Start-Sleep 1
+        removeApps
         # ==================================================
-        Disable_AppSuggestionsAndConsumerFeatures
-        Start-Sleep 1
+        disableAppSuggestionsAndConsumerFeatures
         # ==================================================
-        Disable_Tasks
-        Start-Sleep 1
+        disableTasks
         # ==================================================
-        Disable_Services
-        Start-Sleep 1
+        disableServices
         # ==================================================
-        Disable_FeedbackExperienceAndTelemetry
-        Start-Sleep 1
+        disableFeedbackExperienceAndTelemetry
         # ==================================================
-        Disable_WindowsDefenderCloud
-        Start-Sleep 1
+        disableDefenderCloud
         # ==================================================
-        Disable_FastStartup
-        Start-Sleep 1
+        disableFastStartup
         # ==================================================
-        Disable_EdgeShortcut
-        Start-Sleep 1
+        disableEdgeShortcut
         # ==================================================
-        Disable_LockScreen
-        Start-Sleep 1
+        disableLockScreen
         # ==================================================
-        Enable_ExplorerThisPC
-        Start-Sleep 1
+        setExplorerThisPC
         # ==================================================
-        Disable_RecentlyFrequently
-        Start-Sleep 1
+        disableRecentlyFrequently
         # ==================================================
-        Remove_3DObjectsFolder
-        Start-Sleep 1
+        remove3DObjectsFolder
         # ==================================================
-        Remove_EditWithPhotos
-        Start-Sleep 1
+        removeEditWithPhotos
         # ==================================================
-        Remove_CreateANewVideo
-        Start-Sleep 1
+        removeCreateANewVideo
         # ==================================================
-        Remove_EditWithPaint3D
-        Start-Sleep 1
+        removeEditWithPaint3D
         # ==================================================
-        Remove_Share
-        Start-Sleep 1
+        removeShare
         # ==================================================
-        Remove_IncludeInLibrary
-        Start-Sleep 1
+        removeIncludeInLibrary
         # ==================================================
-        Remove_RestoreToPreviousVersions
-        Start-Sleep 1
+        removeRestoreToPreviousVersions
       }
       No {
-        Write-Output "The Script was aborted. Exiting now..."
+        Write-Output "Script aborted. Exiting now..."
         Start-Sleep 3
         Clear-Host
         Exit
       }
     }
-    # ==================================================
     Write-Output " ____                   _"
     Write-Output "|  _ \  ___  _ __   ___| |"
     Write-Output "| | | |/ _ \| '_ \ / _ \ |"
     Write-Output "| |_| | (_) | | | |  __/_|"
     Write-Output "|____/ \___/|_| |_|\___(_)"
     Write-Output ""
-    Write-Output "The Script has been executed."
-    Write-Output ""
-    Write-Output "=================================================="
     Write-Output ""
     Write-Output "Would you like to restart your System?"
-    $ReadHost = Read-Host " ( Yes / No ) "
-    Switch ($Readhost) {
+    Switch (Read-Host "( Yes / No )") {
       Yes {
         Write-Output "Restarting System..."
         Start-Sleep 3
