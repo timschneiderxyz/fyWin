@@ -1,18 +1,12 @@
 # fyWin10 - For your Windows 10 <!-- omit in toc -->
 
-This PowerShell Script helps you, among other things, to get rid of pre-installed apps on Windows 10, disable unnecessary tasks and services as well as to protect your privacy. A detailed list of all the features provided by this script is given below.
+This PowerShell Script helps you to get rid of all kinds of bloatware and other inconveniences Windows 10 brings with it. Well, at least most of it. A detailed list of all the features provided by this script is given below.
 
 ## Disclaimer
 
 **The script is provided as is and you use it at your own risk. I am not liable for any damages or problems that may result from using it. Also, there is no function to revert the changes.**
 
 **Tested with Windows 10 on Build 1909 64-Bit.**
-
-## Purpose
-
-The purpose of this Script is quite simple: To get rid of all the inconveniences Windows 10 brings with it. At least most of them.
-
-It is very annoying that such a script is even necessary, after all you have paid for your operating system (at least most people did). Nevertheless, Microsoft doesn't seem to care about this and puts all kinds of bloatware and other inconveniences into the operating system. With the help of this Script it is possible to fix at least some of this.
 
 
 ---
@@ -22,30 +16,42 @@ It is very annoying that such a script is even necessary, after all you have pai
 
 Follow the instructions below to avoid any problems and questions.
 
-### Preperation
-
-1. Update Windows to the latest version (Settings -> Updates -> Search for Updates)
-3. Open PowerShell as administrator and enter `Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force`
-
-If you want to revert this after executing the Script, simply copy `Set-ExecutionPolicy Restricted -Scope CurrentUser -Force` to the command line.
-
 ### Execution
 
-After the preparation is done we can now start to run the Script.
+#### Remote
 
-1. Download the fyWin10.ps1 file from this repository.
-2. CD with the previously opened PowerShell into the folder where the downloaded file is located
-3. Run the script `.\fyWin10.ps1`
+1. Update Windows (Settings -> Updates -> Search for Updates)
+2. Open PowerShell as administrator and enter this command:
 
-You will now be asked how you would like to run the Script. There are two options: `Interactive` and `Silent`.
+```PowerShell
+  Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1'))
+```
 
-**Interactive:** In this mode the script asks you which function you want to execute and which not.
+#### Local
 
-**Silent:** If you select this mode, the script will execute all functions one after the other without asking you.
+1. Update Windows (Settings -> Updates -> Search for Updates)
+2. Download the fyWin10.ps1 file from this repository
+3. Open PowerShell as administrator and enter `Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force`
+4. Change directory into the folder where the downloaded file is located run the script `.\fyWin10.ps1`
 
-> You must enter the commands exactly as specified. So for example it needs to be `Yes` not just `Y` to work. However, it does not matter whether the letters are upper or lower case.
+If you want to revert to the execution policy after running the script, simply type `Set-ExecutionPolicy Restricted -Scope CurrentUser -Force` into the command line.
 
-It is recommended to restart the computer after executing the script.
+### Modes
+
+You can run this script in two different modes, `Interactive` or `Silent`.
+
+#### Interactive
+
+In this mode the script asks you which function you want to execute and which not.
+
+#### Silent
+
+If you select this mode, the script will execute all functions one after the other without asking you.
+
+### Notes
+
+- You must enter the commands exactly as specified. So for example it needs to be `Yes` not just `Y` to work. However, it does not matter whether the letters are upper or lower case.
+- It is recommended to restart the computer after executing the script.
 
 
 ---
@@ -58,8 +64,6 @@ Following is a list of all the functions provided by this script.
 - Remove pre-installed Apps
 
 ````plaintext
-  Apps marked with * must be uncommented in the script if you want to keep them. To do this simply remove the # in the corresponding line. Same thing goes in reverse.
-
   These Apps won't be removed with this function:
 
   Calculator
@@ -68,6 +72,8 @@ Following is a list of all the functions provided by this script.
   *Sticky Notes
   *Weather
   Windows Store
+
+  Apps marked with * must be uncommented in the script if you want to keep them.
 
   These Apps can't be removed with this function:
 
