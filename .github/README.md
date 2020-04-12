@@ -1,4 +1,4 @@
-# fyWin10 - For your Windows 10 <!-- omit in toc -->
+# fyWin10 <!-- omit in toc -->
 
 This PowerShell Script helps you to get rid of all kinds of bloatware and other inconveniences Windows 10 brings with it. Well, at least most of it. A detailed list of all the features provided by this script is given below.
 
@@ -40,13 +40,9 @@ If you want to revert to the execution policy after running the script, simply t
 
 You can run this script in two different modes, `Interactive` or `Silent`.
 
-#### Interactive
+**Interactive:** In this mode the script asks you which function you want to execute and which not.
 
-In this mode the script asks you which function you want to execute and which not.
-
-#### Silent
-
-If you select this mode, the script will execute all functions one after the other without asking you.
+**Silent:** If you select this mode, the script will execute all functions one after the other without asking you.
 
 ### Notes
 
@@ -61,10 +57,10 @@ If you select this mode, the script will execute all functions one after the oth
 
 Following is a list of all the functions provided by this script.
 
-- Remove pre-installed Apps
+- Remove pre-installed apps
 
 ````plaintext
-  These Apps won't be removed with this function:
+  These apps won't be removed with this function:
 
   Calculator
   Photos
@@ -75,7 +71,7 @@ Following is a list of all the functions provided by this script.
 
   Apps marked with * must be uncommented in the script if you want to keep them.
 
-  These Apps can't be removed with this function:
+  These apps can't be removed with this function:
 
   Connect
   Cortana
@@ -85,38 +81,39 @@ Following is a list of all the functions provided by this script.
   Windows Defender
 ````
 
-- Disable App suggestions and Windows Consumer Features
-- Disable unnecessary Scheduled Tasks
+- Disable app suggestions and consumer features
+- Disable unnecessary tasks
 
 ````plaintext
-  Consolidator - Windows Customer Experience Improvement Program. Collects usage data
-  UsbCeip - Customer Experience Improvement Program. Collects USB related data
-  XblGameSaveTask - Synchronize and upload Xbox Live Save Games or related settings
+  Consolidator - Customer experience improvement program, collects usage data
+  UsbCeip - Same as Consolidator for USB related data
+  XblGameSaveTask - Synchronize and upload Xbox Live save games or related settings
   XblGameSaveTaskLogon - Same as XblGameSaveTask
 ````
 
-- Disable unnecessary Windows Services
+- Disable unnecessary services
 
 ````plaintext
-  diagnosticshub.standardcollector.service - Microsoft Diagnostics Hub Standard Collector service
-  DiagTrack - Diagnostics Tracking service
+  diagnosticshub.standardcollector.service - Microsoft diagnostics hub standard collector
+  DiagTrack - Diagnostics tracking
   dmwappushsvc - Transmission of user data
   lfsvc - Monitors the current location of the system and manages geofences
   RetailDemo - Controls device activity while it is in retail demo mode
-  WbioSrvc - Windows Biometry service
+  WbioSrvc - Biometry service
   xbgm - Monitors games
   XblAuthManage - Provides Xbox Live authentication and authorization services
   XblGameSave - Synchronizes data stored for Xbox Live games
   XboxNetApiSvc - Supports the application programming interface Windows.Networking.XboxLive
 ````
 
-- Disable Feedback Experience and Telemetry
-- Disable Windows Defender Cloud
-- Disable Fast Startup
-- Disable Edge Desktop Shortcut creation after a Windows Update
-- Disable the Windows 10 Lock Screen
-- Set 'This PC' as default Explorer start view
+- Disable feedback experience and telemetry
+- Disable defender cloud
+- Disable fast startup
+- Disable the lock screen
+- Cleanup taskbar (hide search, cortana and Taskview and use small icons)
+- Set 'This PC' as Explorer start view
 - Disable recently and frequently used in Explorer
+- Show hidden folders/files in Explorer
 - Remove the '3D Objects' folder
 - Remove these entries from the context menu:
   - 'Edit With Photos'
@@ -125,6 +122,7 @@ Following is a list of all the functions provided by this script.
   - 'Share'
   - 'Include in Library'
   - 'Restore to previous Versions'
+- Disable Edge shortcut creation after a Windows update
 
 
 ---
@@ -136,4 +134,4 @@ If you would like to buy me a beer 🍺, you can do this [here](https://paypal.m
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under MIT. See the [LICENSE](LICENSE) file for more details.
