@@ -79,7 +79,7 @@ function disableAppSuggestionsAndConsumerFeatures {
   New-ItemProperty $pathTwo -Name DisableWindowsConsumerFeatures -Value 1 -ea 0 | Out-Null
 }
 
-# Disable unnecessary tasks
+# Disable tasks
 # ==============================================================================
 
 function disableTasks {
@@ -93,7 +93,7 @@ function disableTasks {
   }
 }
 
-# Disable unnecessary services
+# Disable services
 # ==============================================================================
 
 function disableServices {
@@ -203,7 +203,7 @@ function remove3DObjectsFolder {
       "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
       "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}"
     )) {
-    Remove-Item $path -Recurse -ea 0 | Out-Null
+    Remove-Item $path -Recurse -ea 0
   }
 }
 
@@ -228,7 +228,7 @@ function removeCreateANewVideo {
       "HKCR:\AppX43hnxtbyyps62jhe9sqpdzxn1790zetc\Shell\ShellCreateVideo"
       "HKCR:\AppXk0g4vb8gvt7b93tg50ybcy892pge6jmt\Shell\ShellCreateVideo"
     )) {
-    Remove-Item $path -Recurse -ea 0 | Out-Null
+    Remove-Item $path -Recurse -ea 0
   }
 
   Remove-PSDrive HKCR | Out-Null
@@ -238,25 +238,25 @@ function removeCreateANewVideo {
 # ==============================================================================
 
 function removeEditWithPaint3D {
-  $pathFileAssociations = "HKLM:\SOFTWARE\Classes\SystemFileAssociations"
+  $pathFA = "HKLM:\SOFTWARE\Classes\SystemFileAssociations"
   foreach ($path in @(
-      "$pathFileAssociations\.3mf\Shell\3D Edit"
-      "$pathFileAssociations\.bmp\Shell\3D Edit"
-      "$pathFileAssociations\.gif\Shell\3D Edit"
-      "$pathFileAssociations\.glb\Shell\3D Edit"
-      "$pathFileAssociations\.fbx\Shell\3D Edit"
-      "$pathFileAssociations\.jfif\Shell\3D Edit"
-      "$pathFileAssociations\.jpe\Shell\3D Edit"
-      "$pathFileAssociations\.jpeg\Shell\3D Edit"
-      "$pathFileAssociations\.jpg\Shell\3D Edit"
-      "$pathFileAssociations\.obj\Shell\3D Edit"
-      "$pathFileAssociations\.ply\Shell\3D Edit"
-      "$pathFileAssociations\.png\Shell\3D Edit"
-      "$pathFileAssociations\.stl\Shell\3D Edit"
-      "$pathFileAssociations\.tif\Shell\3D Edit"
-      "$pathFileAssociations\.tiff\Shell\3D Edit"
+      "$pathFA\.3mf\Shell\3D Edit"
+      "$pathFA\.bmp\Shell\3D Edit"
+      "$pathFA\.gif\Shell\3D Edit"
+      "$pathFA\.glb\Shell\3D Edit"
+      "$pathFA\.fbx\Shell\3D Edit"
+      "$pathFA\.jfif\Shell\3D Edit"
+      "$pathFA\.jpe\Shell\3D Edit"
+      "$pathFA\.jpeg\Shell\3D Edit"
+      "$pathFA\.jpg\Shell\3D Edit"
+      "$pathFA\.obj\Shell\3D Edit"
+      "$pathFA\.ply\Shell\3D Edit"
+      "$pathFA\.png\Shell\3D Edit"
+      "$pathFA\.stl\Shell\3D Edit"
+      "$pathFA\.tif\Shell\3D Edit"
+      "$pathFA\.tiff\Shell\3D Edit"
     )) {
-    Remove-Item $path -Recurse -ea 0 | Out-Null
+    Remove-Item $path -Recurse -ea 0
   }
 }
 
@@ -264,7 +264,7 @@ function removeEditWithPaint3D {
 # ==============================================================================
 
 function removeShare {
-  Remove-Item "HKCR:\*\shellex\ContextMenuHandlers\ModernSharing" -Recurse -ea 0 | Out-Null
+  Remove-Item "HKCR:\*\shellex\ContextMenuHandlers\ModernSharing" -Recurse -ea 0
 }
 
 # Remove 'Include in Library' from the context menu
@@ -277,7 +277,7 @@ function removeIncludeInLibrary {
       "HKCR:\Folder\ShellEx\ContextMenuHandlers\Library Location"
       "HKLM:\SOFTWARE\Classes\Folder\ShellEx\ContextMenuHandlers\Library Location"
     )) {
-    Remove-Item $path -Recurse -ea 0 | Out-Null
+    Remove-Item $path -Recurse -ea 0
   }
 
   Remove-PSDrive HKCR | Out-Null
@@ -295,7 +295,7 @@ function removeRestoreToPreviousVersions {
       "HKCR:\Directory\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}"
       "HKCR:\Drive\shellex\ContextMenuHandlers\{596AB062-B4D2-4215-9F74-E9109B0A8153}"
     )) {
-    Remove-Item $path -Recurse -ea 0 | Out-Null
+    Remove-Item $path -Recurse -ea 0
   }
 
   Remove-PSDrive HKCR | Out-Null
@@ -415,8 +415,48 @@ $functions = @(
   }
 )
 
+function askMode {
+  do { $response = Read-Host "How would you like to run this script? ( Interactive / Silent )" }
+  until(
+    ($response -eq "Interactive") -or
+    ($response -eq "i") -or
+    ($response -eq "Silent") -or
+    ($response -eq "s")
+  )
+
+  if ( ($response -eq "Interactive") -or ($response -eq "i")) {
+    return "Interactive"
+  }
+  elseif (($response -eq "Silent") -or ($response -eq "s")) {
+    return "Silent"
+  }
+}
+
+function askYesNo {
+  param (
+    [Parameter(Mandatory)]
+    [String] $question
+  )
+
+  do { $response = Read-Host "$question ( Yes / No )" }
+  until(
+    ($response -eq "Yes") -or
+    ($response -eq "y") -or
+    ($response -eq "No") -or
+    ($response -eq "n")
+  )
+
+  if (($response -eq "Yes") -or ($response -eq "y")) {
+    return "Yes"
+  }
+  elseif (($response -eq "No") -or ($response -eq "n")) {
+    return "No"
+  }
+}
+
 function finalize {
   Write-Host -ForegroundColor Red "
+
 
            ____                   _
           |  _ \  ___  _ __   ___| |
@@ -426,7 +466,7 @@ function finalize {
 
 
   "
-  switch (Read-Host "Would you like to restart your system? ( Yes / No )") {
+  switch (askYesNo "Would you like to restart your system?") {
     Yes {
       Write-Host "Restarting system..."
       Start-Sleep 1
@@ -440,7 +480,7 @@ function finalize {
   }
 }
 
-switch (Read-Host "How would you like to run this script? ( Interactive / Silent )") {
+switch (askMode) {
   # ============================================================================
   # Interactive
   # ============================================================================
@@ -448,7 +488,7 @@ switch (Read-Host "How would you like to run this script? ( Interactive / Silent
     Write-Host ""
     Write-Host ""
     foreach ($entry in $functions) {
-      switch (Read-Host "$($entry.question) ( Yes / No )") {
+      switch (askYesNo $entry.question) {
         Yes {
           Write-Host $entry.execute -NoNewline
           & $entry.function
@@ -469,7 +509,7 @@ switch (Read-Host "How would you like to run this script? ( Interactive / Silent
   Silent {
     Write-Host ""
     Write-Host ""
-    switch (Read-Host "Are you sure? ( Yes / No )") {
+    switch (askYesNo "Are you sure?") {
       Yes {
         foreach ($entry in $functions) {
           Write-Host $entry.execute -NoNewline

@@ -44,11 +44,6 @@ You can run this script in two different modes, `Interactive` or `Silent`.
 
 **Silent:** If you select this mode, the script will execute all functions one after the other without asking you.
 
-### Notes
-
-- You must enter the commands exactly as specified. So for example it needs to be `Yes` not just `Y` to work. However, it does not matter whether the letters are upper or lower case.
-- It is recommended to restart the computer after executing the script.
-
 
 ---
 
