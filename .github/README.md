@@ -24,7 +24,7 @@ Follow the instructions below to avoid any problems and questions.
 2. Open PowerShell as administrator and enter this command:
 
 ```PowerShell
-  Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1'))
+  iwr "https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1" | iex
 ```
 
 #### Local
