@@ -6,7 +6,7 @@ This PowerShell Script helps you to get rid of all kinds of bloatware and other 
 
 **The script is provided as is and you use it at your own risk. I am not liable for any damages or problems that may result from using it. Also, there is no function to revert the changes.**
 
-**Tested with Windows 10 on Build 1909 64-Bit.**
+**Tested with Windows 10 on Build 2004.**
 
 
 ---
@@ -24,7 +24,7 @@ Follow the instructions below to avoid any problems and questions.
 2. Open PowerShell as administrator and enter this command:
 
 ```PowerShell
-  iwr "https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1" | iex
+  iwr "https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1" -UseBasicParsing | iex
 ```
 
 #### Local
@@ -42,7 +42,7 @@ You can run this script in two different modes, `Interactive` or `Silent`.
 
 **Interactive:** In this mode the script asks you which function you want to execute and which not.
 
-**Silent:** If you select this mode, the script will execute all functions one after the other without asking you.
+**Silent:** If you select this mode, the script will execute all functions without asking you.
 
 
 ---
