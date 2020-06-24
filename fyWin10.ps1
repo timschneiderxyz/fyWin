@@ -133,10 +133,8 @@ function disableFeedbackExperienceAndTelemetry {
 # ==============================================================================
 
 function disableDefenderCloud {
-  $path = "HKLM:\SOFTWARE\Microsoft\Windows Defender\Spynet"
-
-  Set-ItemProperty $path -Name SpynetReporting -Value 0
-  Set-ItemProperty $path -Name SubmitSamplesConsent -Value 0
+  Set-MpPreference -MAPSReporting Disabled
+  Set-MpPreference -SubmitSamplesConsent NeverSend
 }
 
 # Disable fast startup
@@ -212,9 +210,7 @@ function remove3DObjectsFolder {
 
 function removeEditWithPhotos {
   New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT | Out-Null
-
   New-ItemProperty "HKCR:\AppX43hnxtbyyps62jhe9sqpdzxn1790zetc\Shell\ShellEdit" -Name ProgrammaticAccessOnly -Value 1 -ea 0 | Out-Null
-
   Remove-PSDrive HKCR | Out-Null
 }
 
