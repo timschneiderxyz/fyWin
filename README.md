@@ -24,7 +24,7 @@ Follow the instructions below to avoid any problems and questions.
 2. Open PowerShell as administrator and enter this command:
 
 ```PowerShell
-  iwr "https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1" -UseBasicParsing | iex
+iwr "https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1" -UseBasicParsing | iex
 ```
 
 #### Local
@@ -55,50 +55,50 @@ Following is a list of all the functions provided by this script.
 - Remove pre-installed apps
 
 ````plaintext
-  These apps won't be removed with this function:
+These apps won't be removed with this function:
 
-  Calculator
-  Photos
-  Snip & Sketch
-  *Sticky Notes
-  *Weather
-  Windows Store
+Calculator
+Photos
+Snip & Sketch
+*Sticky Notes
+*Weather
+Windows Store
 
-  Apps marked with * must be uncommented in the script if you want to keep them.
+Apps marked with * must be uncommented in the script if you want to keep them.
 
-  These apps can't be removed with this function:
+These apps can't be removed with this function:
 
-  Connect
-  Cortana
-  Microsoft Edge
-  OneDrive
-  Settings
-  Windows Defender
+Connect
+Cortana
+Microsoft Edge
+OneDrive
+Settings
+Windows Defender
 ````
 
 - Disable app suggestions and consumer features
 - Disable unnecessary tasks
 
 ````plaintext
-  Consolidator - Customer experience improvement program, collects usage data
-  UsbCeip - Same as Consolidator for USB related data
-  XblGameSaveTask - Synchronize and upload Xbox Live save games or related settings
-  XblGameSaveTaskLogon - Same as XblGameSaveTask
+Consolidator - Customer experience improvement program, collects usage data
+UsbCeip - Same as Consolidator for USB related data
+XblGameSaveTask - Synchronize and upload Xbox Live save games or related settings
+XblGameSaveTaskLogon - Same as XblGameSaveTask
 ````
 
 - Disable unnecessary services
 
 ````plaintext
-  diagnosticshub.standardcollector.service - Microsoft diagnostics hub standard collector
-  DiagTrack - Diagnostics tracking
-  dmwappushsvc - Transmission of user data
-  lfsvc - Monitors the current location of the system and manages geofences
-  RetailDemo - Controls device activity while it is in retail demo mode
-  WbioSrvc - Biometry service
-  xbgm - Monitors games
-  XblAuthManage - Provides Xbox Live authentication and authorization services
-  XblGameSave - Synchronizes data stored for Xbox Live games
-  XboxNetApiSvc - Supports the application programming interface Windows.Networking.XboxLive
+diagnosticshub.standardcollector.service - Microsoft diagnostics hub standard collector
+DiagTrack - Diagnostics tracking
+dmwappushsvc - Transmission of user data
+lfsvc - Monitors the current location of the system and manages geofences
+RetailDemo - Controls device activity while it is in retail demo mode
+WbioSrvc - Biometry service
+xbgm - Monitors games
+XblAuthManage - Provides Xbox Live authentication and authorization services
+XblGameSave - Synchronizes data stored for Xbox Live games
+XboxNetApiSvc - Supports the application programming interface Windows.Networking.XboxLive
 ````
 
 - Disable feedback experience and telemetry
