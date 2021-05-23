@@ -27,9 +27,9 @@ Write-Host -ForegroundColor Red @"
 
 "@
 
-<#  ========================================================================
-    # Functions
-    ========================================================================  #>
+# ==============================================================================
+# Functions
+# ==============================================================================
 
 # Remove pre-installed apps
 # ==============================================================================
@@ -157,13 +157,19 @@ function disableLockScreen {
   New-ItemProperty $path -Name NoLockScreen -Value 1 -ea 0 | Out-Null
 }
 
+# Disable mouse acceleration
+# ==============================================================================
+
+function disableMouseAcceleration {
+  Set-ItemProperty "HKCU:\Control Panel\Mouse" -Name MouseSpeed -Value 0
+}
+
 # Cleanup taskbar
 # ==============================================================================
 
 function cleanupTaskbar {
   $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion"
 
-  Set-ItemProperty "$path\Explorer\Advanced" -Name TaskbarSmallIcons -Value 1
   Set-ItemProperty "$path\Explorer\Advanced" -Name ShowCortanaButton -Value 0
   Set-ItemProperty "$path\Explorer\Advanced" -Name ShowTaskViewButton -Value 0
   Set-ItemProperty "$path\Search" -Name SearchboxTaskbarMode -Value 0
@@ -304,9 +310,9 @@ function disableEdgeShortcut {
   New-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" -Name DisableEdgeDesktopShortcutCreation -Value 1 -ea 0 | Out-Null
 }
 
-<#  ========================================================================
-    # Execution
-    ========================================================================  #>
+# ==============================================================================
+# Execution
+# ==============================================================================
 
 $functions = @(
   [pscustomobject]@{
@@ -348,6 +354,11 @@ $functions = @(
     question = "Disable lock screen?";
     execute  = "Disabling lock screen...";
     function = "disableLockScreen"
+  }
+  [pscustomobject]@{
+    question = "Disable mouse acceleration?";
+    execute  = "Disabling mouse acceleration...";
+    function = "disableMouseAcceleration"
   }
   [pscustomobject]@{
     question = "Cleanup taskbar?";
@@ -477,9 +488,6 @@ function finalize {
 }
 
 switch (askMode) {
-  # ============================================================================
-  # Interactive
-  # ============================================================================
   Interactive {
     Write-Host ""
     Write-Host ""
@@ -499,9 +507,6 @@ switch (askMode) {
     }
     finalize
   }
-  # ============================================================================
-  # Silent
-  # ============================================================================
   Silent {
     Write-Host ""
     Write-Host ""

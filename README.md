@@ -1,4 +1,4 @@
-# fyWin10 <!-- omit in toc -->
+# fyWin10
 
 This PowerShell Script helps you to get rid of all kinds of bloatware and other inconveniences Windows 10 brings with it. Well, at least most of it. A detailed list of all the features provided by this script is given below.
 
@@ -6,11 +6,7 @@ This PowerShell Script helps you to get rid of all kinds of bloatware and other 
 
 **The script is provided as is and you use it at your own risk. I am not liable for any damages or problems that may result from using it. Also, there is no function to revert the changes.**
 
-**Tested with Windows 10 on Build 2004.**
-
-
----
-
+**Tested with Windows 10 on Build 21h1.**
 
 ## How to use
 
@@ -18,7 +14,7 @@ Follow the instructions below to avoid any problems and questions.
 
 ### Execution
 
-#### Remote
+Remote:
 
 1. Update Windows (Settings -> Updates -> Search for Updates)
 2. Open PowerShell as administrator and enter this command:
@@ -27,7 +23,7 @@ Follow the instructions below to avoid any problems and questions.
 iwr "https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1" -UseBasicParsing | iex
 ```
 
-#### Local
+Local:
 
 1. Update Windows (Settings -> Updates -> Search for Updates)
 2. Download the fyWin10.ps1 file from this repository
@@ -44,15 +40,11 @@ You can run this script in two different modes, `Interactive` or `Silent`.
 
 **Silent:** If you select this mode, the script will execute all functions without asking you.
 
-
----
-
-
 ## Functions
 
 Following is a list of all the functions provided by this script.
 
-- Remove pre-installed apps
+- Remove pre-installed apps:
 
 ````plaintext
 These apps won't be removed with this function:
@@ -77,7 +69,7 @@ Windows Defender
 ````
 
 - Disable app suggestions and consumer features
-- Disable unnecessary tasks
+- Disable unnecessary tasks:
 
 ````plaintext
 Consolidator - Customer experience improvement program, collects usage data
@@ -86,7 +78,7 @@ XblGameSaveTask - Synchronize and upload Xbox Live save games or related setting
 XblGameSaveTaskLogon - Same as XblGameSaveTask
 ````
 
-- Disable unnecessary services
+- Disable unnecessary services:
 
 ````plaintext
 diagnosticshub.standardcollector.service - Microsoft diagnostics hub standard collector
@@ -104,24 +96,21 @@ XboxNetApiSvc - Supports the application programming interface Windows.Networkin
 - Disable feedback experience and telemetry
 - Disable defender cloud
 - Disable fast startup
-- Disable the lock screen
-- Cleanup taskbar (hide search, cortana and Taskview and use small icons)
+- Disable lock screen
+- Disable mouse acceleration
+- Cleanup taskbar (hide search, cortana and Taskview)
 - Set 'This PC' as Explorer start view
 - Disable recently and frequently used in Explorer
 - Show hidden folders/files in Explorer
 - Remove the '3D Objects' folder
 - Remove these entries from the context menu:
-  - 'Edit With Photos'
-  - 'Create A New Video'
-  - 'Edit with Paint 3D'
-  - 'Share'
-  - 'Include in Library'
-  - 'Restore to previous Versions'
+  - "Edit With Photos"
+  - "Create A New Video"
+  - "Edit with Paint 3D"
+  - "Share"
+  - "Include in Library"
+  - "Restore to previous Versions"
 - Disable Edge shortcut creation after a Windows update
-
-
----
-
 
 ## Donations
 
