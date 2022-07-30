@@ -1,4 +1,4 @@
-# fyWin10
+# fyWin
 
 This PowerShell Script helps you to get rid of all kinds of bloatware and other inconveniences Windows 10 brings with it. Well, at least most of it. A detailed list of all the features provided by this script is given below.
 
@@ -20,15 +20,15 @@ Remote:
 2. Open PowerShell as administrator and enter this command:
 
 ```PowerShell
-iwr "https://raw.githubusercontent.com/RanzigeButter/fyWin10/master/fyWin10.ps1" -UseBasicParsing | iex
+iwr "https://raw.githubusercontent.com/timschneiderxyz/fyWin/main/fyWin.ps1" -UseBasicParsing | iex
 ```
 
 Local:
 
 1. Update Windows (Settings -> Updates -> Search for Updates)
-2. Download the fyWin10.ps1 file from this repository
+2. Download the fyWin.ps1 file from this repository
 3. Open PowerShell as administrator and enter `Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force`
-4. Change directory into the folder where the downloaded file is located run the script `.\fyWin10.ps1`
+4. Change directory into the folder where the downloaded file is located run the script `.\fyWin.ps1`
 
 If you want to revert to the execution policy after running the script, simply type `Set-ExecutionPolicy Restricted -Scope CurrentUser -Force` into the command line.
 
