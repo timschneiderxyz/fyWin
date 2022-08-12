@@ -40,6 +40,11 @@ function sst([int]$timeInMinutes) {
   shutdown -s -t $timeInSeconds
   Write-Host "The Computer will shut down in $timeInMinutes minutes."
 }
+function sync-configs {
+  (Invoke-WebRequest "https://raw.githubusercontent.com/timschneiderxyz/fyWin/main/configs/powershell-profile.ps1").content | Set-Content "$env:APPDATA\PowerShell\profile.ps1"
+  $dirWT = Get-ChildItem "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_*" | Select-Object -First 1 -Expand FullName
+  (Invoke-WebRequest "https://raw.githubusercontent.com/timschneiderxyz/fyWin/main/configs/terminal-settings.json").content | Set-Content "$dirWT\LocalState\settings.json"
+}
 
 # Aliases - Directories & Files
 function .. { Set-Location ".." }

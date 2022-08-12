@@ -13,7 +13,7 @@ This version of the script is designed to work with Windows 11. The old version 
 Open PowerShell as administrator and enter this command:
 
 ```PowerShell
-iwr "https://timschneider.xyz/scripts/fyWin" | iex
+iwr "https://timschneider.xyz/scripts/fywin" | iex
 ```
 
 ## Modes
