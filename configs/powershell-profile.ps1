@@ -33,7 +33,6 @@ function global:prompt {
 }
 
 # Aliases - Common
-function x { exit }
 function sudo { Start-Process -Verb RunAs wt "-p PowerShell" }
 function sst([int]$timeInMinutes) {
   $timeInSeconds = $timeInMinutes * 60
