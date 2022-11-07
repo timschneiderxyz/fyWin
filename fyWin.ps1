@@ -26,18 +26,11 @@ Write-Host -ForegroundColor Yellow @"
 
 "@
 
-# Apps, Packages and Capabilities
+# Packages and Capabilities
 # ==============================================================================
 
-function cleanupAppsPackagesCapabilities {
-  Write-Host -NoNewline "Cleaning up Apps, Packages and Capabilities..."
-
-  # Apps
-  foreach ($app in @(
-      "Microsoft.OneDrive"
-    )) {
-    winget uninstall $app
-  }
+function cleanupPackagesCapabilities {
+  Write-Host -NoNewline "Cleaning up Packages and Capabilities..."
 
   # Packages
   foreach ($package in @(
@@ -48,7 +41,6 @@ function cleanupAppsPackagesCapabilities {
       "*Microsoft.MicrosoftOfficeHub*"
       "*Microsoft.MicrosoftSolitaireCollection*"
       "*Microsoft.MicrosoftStickyNotes*"
-      "*Microsoft.OneDriveSync*"
       "*Microsoft.PowerAutomateDesktop*"
       "*Microsoft.Todos*"
       "*microsoft.windowscommunicationsapps*"
@@ -222,8 +214,8 @@ function setupEnvironment {
 
 $functions = @(
   [pscustomobject]@{
-    question = "Cleanup Apps, Packages and Capabilities?";
-    function = "cleanupAppsPackagesCapabilities"
+    question = "Cleanup Packages and Capabilities?";
+    function = "cleanupPackagesCapabilities"
   }
   [pscustomobject]@{
     question = "Setup Privacy and Security?";

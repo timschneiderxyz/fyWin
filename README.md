@@ -28,9 +28,6 @@ You can run this script in two different modes: `Interactive` or `Silent`.
 
 ### Remove unnecessary Apps, Packages and Capabilities
 
-**Apps**
-- OneDrive
-
 **Packages**
 - Microsoft.BingNews
 - Microsoft.BingWeather
@@ -39,7 +36,6 @@ You can run this script in two different modes: `Interactive` or `Silent`.
 - Microsoft.MicrosoftOfficeHub
 - Microsoft.MicrosoftSolitaireCollection
 - Microsoft.MicrosoftStickyNotes
-- Microsoft.OneDriveSync
 - Microsoft.PowerAutomateDesktop
 - Microsoft.Todos
 - microsoft.windowscommunicationsapps
